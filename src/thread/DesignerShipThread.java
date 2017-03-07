@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 public class DesignerShipThread implements Callable<AbstractShip> {
 
     private volatile AbstractShip abstractShip;
-    private volatile int countOfShip = 10;
     private volatile int shipId = 0;
 
     @Override

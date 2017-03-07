@@ -14,7 +14,7 @@ import java.util.concurrent.*;
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CommonShipThread commonShipThread = new CommonShipThread();
-        commonShipThread.designShip();
+        commonShipThread.designShip(10);
 
     }
 

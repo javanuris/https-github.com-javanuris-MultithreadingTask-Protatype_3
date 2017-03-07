@@ -12,16 +12,16 @@ public class CommonShipThread {
 
     private ArrayBlockingQueue<AbstractShip> ships = new ArrayBlockingQueue<>(1);
 
-    private ArrayBlockingQueue<AbstractShip> shipsListOil = new ArrayBlockingQueue<>(10);
-    private ArrayBlockingQueue<AbstractShip> shipsListBox = new ArrayBlockingQueue<>(10);
-    private ArrayBlockingQueue<AbstractShip> shipsListEat = new ArrayBlockingQueue<>(10);
+    private ArrayBlockingQueue<AbstractShip> shipsListOil = new ArrayBlockingQueue<>(1);
+    private ArrayBlockingQueue<AbstractShip> shipsListBox = new ArrayBlockingQueue<>(1);
+    private ArrayBlockingQueue<AbstractShip> shipsListEat = new ArrayBlockingQueue<>(1);
 
 
-    public void designShip() throws InterruptedException {
+    public void designShip(int shipCount) throws InterruptedException {
         DesignerShipThread designerShipThread = new DesignerShipThread();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < shipCount; i++) {
                 Future<AbstractShip> abstractShipFuture = executorService.submit(designerShipThread);
                 ships.add(abstractShipFuture.get());
                 for (AbstractShip abstractShip : ships) {
@@ -44,7 +44,7 @@ public class CommonShipThread {
                 }
             }
         } catch (IllegalStateException e) {
-            executorService.awaitTermination(10, TimeUnit.MILLISECONDS);
+            executorService.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -59,5 +59,6 @@ public class CommonShipThread {
         service.execute(loaderShipThread);
         service.shutdown();
     }
+
 
 }
