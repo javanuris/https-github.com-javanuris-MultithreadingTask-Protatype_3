@@ -1,11 +1,6 @@
 package main;
 
-import ship.AbstractShip;
-import ship.Creator;
 import thread.CommonShipThread;
-import thread.DesignerShipThread;
-
-import java.util.ArrayList;
 import java.util.concurrent.*;
 
 /**
@@ -13,8 +8,8 @@ import java.util.concurrent.*;
  */
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        CommonShipThread commonShipThread = new CommonShipThread();
-        commonShipThread.designShip(10);
+   new CommonShipThread().designShip(30);
+
 
     }
 
