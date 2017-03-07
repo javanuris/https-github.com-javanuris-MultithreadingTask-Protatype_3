@@ -9,22 +9,23 @@ import java.util.concurrent.*;
  * Created by User on 06.03.2017.
  */
 public class CommonShipThread {
-    private ArrayBlockingQueue<AbstractShip> ships = new ArrayBlockingQueue<>(1);
-    private ArrayBlockingQueue<AbstractShip> shipsListOil = new ArrayBlockingQueue<>(10);
-    private ArrayBlockingQueue<AbstractShip> shipsListBox = new ArrayBlockingQueue<>(10);
-    private ArrayBlockingQueue<AbstractShip> shipsListEat = new ArrayBlockingQueue<>(10);
+    private ArrayBlockingQueue<AbstractShip> ships = new ArrayBlockingQueue<>(Creator.TUNEL_COUNT);
+    private ArrayBlockingQueue<AbstractShip> shipsListOil = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
+    private ArrayBlockingQueue<AbstractShip> shipsListBox = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
+    private ArrayBlockingQueue<AbstractShip> shipsListEat = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
 
     private LoaderShipThread loaderOilThread = new LoaderShipThread(shipsListOil);
-    private ExecutorService serviceOil = Executors.newFixedThreadPool(2);
+    private ExecutorService serviceOil = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
     private LoaderShipThread loaderBoxThread = new LoaderShipThread(shipsListBox);
-    private ExecutorService serviceBox = Executors.newFixedThreadPool(2);
+    private ExecutorService serviceBox = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
     private LoaderShipThread loaderEatThread = new LoaderShipThread(shipsListEat);
-    private ExecutorService serviceEat = Executors.newFixedThreadPool(2);
+    private ExecutorService serviceEat = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
 
-   private DesignerShipThread designerShipThread = new DesignerShipThread();
-   private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private DesignerShipThread designerShipThread = new DesignerShipThread();
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public void designShip(int shipCount) throws InterruptedException {
+        System.out.println("Старт!!!");
         try {
             for (int i = 0; i < shipCount; i++) {
                 ships.add(executorService.submit(designerShipThread).get());

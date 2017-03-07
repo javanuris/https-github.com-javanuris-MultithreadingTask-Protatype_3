@@ -1,5 +1,6 @@
 package main;
 
+import ship.Creator;
 import thread.CommonShipThread;
 import java.util.concurrent.*;
 
@@ -8,7 +9,7 @@ import java.util.concurrent.*;
  */
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-   new CommonShipThread().designShip(100);
+   new CommonShipThread().designShip(Creator.SHIP_COUNT);
 
 
     }
