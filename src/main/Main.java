@@ -8,7 +8,7 @@ import java.util.concurrent.*;
  */
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-   new CommonShipThread().designShip(30);
+   new CommonShipThread().designShip(100);
 
 
     }

@@ -11,9 +11,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class LoaderShipThread implements Runnable {
     ArrayBlockingQueue<AbstractShip> ships;
-
     private static final int LOAD_SPEED = 10;
-
     public LoaderShipThread(ArrayBlockingQueue<AbstractShip> abstractShips) {
         this.ships = abstractShips;
     }
@@ -21,7 +19,6 @@ public class LoaderShipThread implements Runnable {
     @Override
     public void run() {
         AbstractShip ship;
-
         try {
             while (ships.size() >0) {
                 ship = ships.take();
@@ -30,7 +27,7 @@ public class LoaderShipThread implements Runnable {
                 System.out.println("Номер: " + ship.getId() + " Начала погрузку");
                 while (!ship.loadDetermine()) {
                     ship.setGoodOnShip(ship.getGoodOnShip() + LOAD_SPEED);
-                    Thread.sleep(1000 + new Random().nextInt(100));
+                    Thread.sleep(100 + new Random().nextInt(1000));
                 }
                 System.out.println("Номер: " + ship.getId() + " Загрузился");
                 Thread.sleep(100);

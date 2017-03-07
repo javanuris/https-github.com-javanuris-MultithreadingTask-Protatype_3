@@ -21,29 +21,34 @@ public class CommonShipThread {
     private LoaderShipThread loaderEatThread = new LoaderShipThread(shipsListEat);
     private ExecutorService serviceEat = Executors.newFixedThreadPool(2);
 
+   private DesignerShipThread designerShipThread = new DesignerShipThread();
+   private ExecutorService executorService = Executors.newSingleThreadExecutor();
+
     public void designShip(int shipCount) throws InterruptedException {
-        DesignerShipThread designerShipThread = new DesignerShipThread();
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             for (int i = 0; i < shipCount; i++) {
                 ships.add(executorService.submit(designerShipThread).get());
-                System.out.println(ships.size());
                 for (AbstractShip abstractShip : ships) {
                     switch (abstractShip.getType()) {
                         case Creator.OIL_SHIP:
+                            if (shipsListOil.size() >= shipsListOil.size()) {
+                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            }
                             shipsListOil.add(ships.take());
-                            System.out.println(shipsListOil.size() + " Oli");
                             serviceOil.execute(loaderOilThread);
                             break;
                         case Creator.BOX_SHIP:
+                            if (shipsListBox.size() >= shipsListBox.size()) {
+                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            }
                             shipsListBox.add(ships.take());
-                            System.out.println(ships.size());
-                            System.out.println(shipsListOil.size() + " Box");
                             serviceBox.execute(loaderBoxThread);
                             break;
                         case Creator.EAT_SHIP:
+                            if (shipsListEat.size() >= shipsListEat.size()) {
+                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            }
                             shipsListEat.add(ships.take());
-                            System.out.println(shipsListOil.size() + " Eat");
                             serviceEat.execute(loaderEatThread);
                             break;
                         default:
@@ -53,11 +58,16 @@ public class CommonShipThread {
             }
         } catch (IllegalStateException e) {
             System.out.println("Cистема перегруженна!!!");
+            shutdownTrio();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        shutdownTrio();
+    }
+
+    private void shutdownTrio() {
         executorService.shutdown();
         serviceOil.shutdown();
         serviceBox.shutdown();
