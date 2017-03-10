@@ -9,22 +9,29 @@ import java.util.concurrent.*;
  * Created by User on 06.03.2017.
  */
 public class CommonShipThread {
-    private ArrayBlockingQueue<AbstractShip> ships = new ArrayBlockingQueue<>(Creator.TUNEL_COUNT);
-    private ArrayBlockingQueue<AbstractShip> shipsListOil = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
-    private ArrayBlockingQueue<AbstractShip> shipsListBox = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
-    private ArrayBlockingQueue<AbstractShip> shipsListEat = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
 
-    private LoaderShipThread loaderOilThread = new LoaderShipThread(shipsListOil);
-    private ExecutorService serviceOil = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
-    private LoaderShipThread loaderBoxThread = new LoaderShipThread(shipsListBox);
-    private ExecutorService serviceBox = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
-    private LoaderShipThread loaderEatThread = new LoaderShipThread(shipsListEat);
-    private ExecutorService serviceEat = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
+    private ArrayBlockingQueue<AbstractShip>
+            ships = new ArrayBlockingQueue<>(Creator.TUNEL_COUNT),
+            shipsListOil = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT),
+            shipsListBox = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT),
+            shipsListEat = new ArrayBlockingQueue<>(Creator.QUEUE_COUNT);
+
+    private LoaderShipThread
+            loaderOilThread = new LoaderShipThread(shipsListOil),
+            loaderBoxThread = new LoaderShipThread(shipsListBox),
+            loaderEatThread = new LoaderShipThread(shipsListEat);
+
+    private ExecutorService
+            serviceOil = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT),
+            serviceBox = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT),
+            serviceEat = Executors.newFixedThreadPool(Creator.CONNECTION_COUNT);
+
 
     private DesignerShipThread designerShipThread = new DesignerShipThread();
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public void designShip(int shipCount) throws InterruptedException {
+    public void loadShip(int shipCount) throws InterruptedException {
+
         System.out.println("Старт!!!");
         try {
             for (int i = 0; i < shipCount; i++) {
@@ -32,22 +39,22 @@ public class CommonShipThread {
                 for (AbstractShip abstractShip : ships) {
                     switch (abstractShip.getType()) {
                         case Creator.OIL_SHIP:
-                            if (shipsListOil.size() >= shipsListOil.size()) {
-                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            while (shipsListOil.size() >= shipsListOil.remainingCapacity()) {
+                                executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
                             }
                             shipsListOil.add(ships.take());
                             serviceOil.execute(loaderOilThread);
                             break;
                         case Creator.BOX_SHIP:
-                            if (shipsListBox.size() >= shipsListBox.size()) {
-                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            while (shipsListBox.size() >= shipsListOil.remainingCapacity()) {
+                                executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
                             }
                             shipsListBox.add(ships.take());
                             serviceBox.execute(loaderBoxThread);
                             break;
                         case Creator.EAT_SHIP:
-                            if (shipsListEat.size() >= shipsListEat.size()) {
-                                executorService.awaitTermination(3, TimeUnit.SECONDS);
+                            while (shipsListEat.size() >= shipsListOil.remainingCapacity()) {
+                                executorService.awaitTermination(1, TimeUnit.MILLISECONDS);
                             }
                             shipsListEat.add(ships.take());
                             serviceEat.execute(loaderEatThread);

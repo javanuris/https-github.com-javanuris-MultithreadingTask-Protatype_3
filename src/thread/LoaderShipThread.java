@@ -23,14 +23,14 @@ public class LoaderShipThread implements Runnable {
             while (ships.size() >0) {
                 ship = ships.take();
                 System.out.println(ship.toString() + " Пришел");
-                Thread.sleep(100);
+                Thread.sleep(100+ new Random().nextInt(100));
                 System.out.println("Номер: " + ship.getId() + " Начала погрузку");
                 while (!ship.loadDetermine()) {
                     ship.setGoodOnShip(ship.getGoodOnShip() + LOAD_SPEED);
-                    Thread.sleep(100 + new Random().nextInt(1000));
+                    Thread.sleep(1000 + new Random().nextInt(3000));
                 }
                 System.out.println("Номер: " + ship.getId() + " Загрузился");
-                Thread.sleep(100);
+                Thread.sleep(100+ new Random().nextInt(100));
                 System.out.println(ship.toString() + " Ушел");
             }
         } catch (InterruptedException e) {

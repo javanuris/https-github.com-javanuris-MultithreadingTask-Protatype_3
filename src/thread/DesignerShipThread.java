@@ -17,7 +17,7 @@ public class DesignerShipThread implements Callable<AbstractShip> {
     public AbstractShip call() throws Exception {
         shipId++;
         abstractShip = new ShipCreator(Creator.TYPE_SHIP[new Random().nextInt(3)], Creator.TYPE_CAPACITY[new Random().nextInt(3)], shipId);
-        Thread.sleep(10+ new Random().nextInt(100));
+        Thread.sleep(100+ new Random().nextInt(1000));
         System.out.println("Караблик: "+abstractShip.getId()+ " :сгенерился!***!***!***!***!***!***!");
         return abstractShip;
     }

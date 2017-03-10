@@ -49,11 +49,11 @@ public abstract class AbstractShip {
         return goodOnShip;
     }
 
-    public  void setGoodOnShip(int goodOnShip) {
+    public synchronized void setGoodOnShip(int goodOnShip) {
         this.goodOnShip = goodOnShip;
     }
 
-    public  boolean loadDetermine() {
+    public synchronized boolean loadDetermine() {
         if (getGoodOnShip() >= getMaxCapacity()) {
             return true;
         }

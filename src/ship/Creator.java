@@ -15,7 +15,7 @@ public interface Creator {
     String LITTLE_CAPACITY = "little";
     String TYPE_CAPACITY[] = {BIG_CAPACITY , MIDDLE_CAPACITY ,LITTLE_CAPACITY};
 
-    int QUEUE_COUNT = 10;
+    int QUEUE_COUNT = 5;
     int TUNEL_COUNT = 1;
     int SHIP_COUNT = 30;
 }

@@ -9,9 +9,7 @@ import java.util.concurrent.*;
  */
 public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-   new CommonShipThread().designShip(Creator.SHIP_COUNT);
-
-
+         new CommonShipThread().loadShip(Creator.SHIP_COUNT);
     }
 
 }
